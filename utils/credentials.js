@@ -1,28 +1,29 @@
-// SauceDemo test credentials
+require('dotenv').config();
+
 const USERS = {
   standard: {
-    username: 'standard_user',
-    password: 'secret_sauce',
+    username: process.env.STANDARD_USER,
+    password: process.env.PASSWORD,
   },
   locked_out: {
-    username: 'locked_out_user',
-    password: 'secret_sauce',
+    username: process.env.LOCKED_OUT_USER,
+    password: process.env.PASSWORD,
   },
   problem: {
-    username: 'problem_user',
-    password: 'secret_sauce',
+    username: process.env.PROBLEM_USER,
+    password: process.env.PASSWORD,
   },
   performance_glitch: {
-    username: 'performance_glitch_user',
-    password: 'secret_sauce',
+    username: process.env.PERFORMANCE_GLITCH_USER,
+    password: process.env.PASSWORD,
   },
   error: {
-    username: 'error_user',
-    password: 'secret_sauce',
+    username: process.env.ERROR_USER,
+    password: process.env.PASSWORD,
   },
   visual: {
-    username: 'visual_user',
-    password: 'secret_sauce',
+    username: process.env.VISUAL_USER,
+    password: process.env.PASSWORD,
   },
 };
 
