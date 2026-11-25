@@ -78,10 +78,10 @@ test.describe('Login Tests', () => {
     await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
   });
 
-  test('should not overlap cart icon and filter icon for visual_user', async ({ page, loginPage }) => {
+  test('should show cart icon overlapping filter dropdown for visual_user', async ({ page, loginPage }) => {
     await label('feature', 'Login');
     await label('story', 'Login dengan visual_user menampilkan visual issue pada icon cart');
-    await description('Verifikasi bahwa visual_user mengalami visual bug dimana icon cart dan filter saling overlap/berdekatan secara tidak wajar.');
+    await description('Verifikasi bahwa visual_user mengalami visual bug dimana icon cart bergeser dan overlap dengan dropdown filter (pada standard_user keduanya tidak overlap).');
     await severity('normal');
 
     await loginPage.login(USERS.visual.username, USERS.visual.password);
@@ -90,9 +90,10 @@ test.describe('Login Tests', () => {
     const cartBox = await page.locator('.shopping_cart_link').boundingBox();
     const filterBox = await page.locator('.product_sort_container').boundingBox();
 
-    const cartRight = cartBox.x + cartBox.width;
-    const filterLeft = filterBox.x;
+    // Two boxes overlap only when they intersect on BOTH the x and y axis
+    const overlapX = cartBox.x < filterBox.x + filterBox.width && filterBox.x < cartBox.x + cartBox.width;
+    const overlapY = cartBox.y < filterBox.y + filterBox.height && filterBox.y < cartBox.y + cartBox.height;
 
-    expect(cartRight).toBeLessThan(filterLeft);
+    expect(overlapX && overlapY).toBe(true);
   });
 });
