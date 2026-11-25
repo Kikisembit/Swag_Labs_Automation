@@ -6,12 +6,19 @@ const URLS = {
   checkoutComplete: 'https://www.saucedemo.com/checkout-complete.html',
 };
 
+const INVENTORY = {
+  totalProducts: 6,
+};
+
 const ERROR_MESSAGES = {
   lockedOut: 'Epic sadface: Sorry, this user has been locked out.',
   usernameRequired: 'Username is required',
   passwordRequired: 'Password is required',
   wrongCredentials: 'Username and password do not match',
   orderComplete: 'Thank you for your order!',
+  firstNameRequired: 'Error: First Name is required',
+  lastNameRequired: 'Error: Last Name is required',
+  postalCodeRequired: 'Error: Postal Code is required',
 };
 
 function randomChars(length = 6) {
@@ -22,4 +29,4 @@ function randomPostalCode() {
   return String(Math.floor(10000 + Math.random() * 90000));
 }
 
-module.exports = { URLS, ERROR_MESSAGES, randomChars, randomPostalCode };
+module.exports = { URLS, INVENTORY, ERROR_MESSAGES, randomChars, randomPostalCode };

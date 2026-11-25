@@ -28,6 +28,20 @@ class InventoryPage {
     await item.locator('button').click();
   }
 
+  async removeItemFromCartByName(name) {
+    const item = this.inventoryItems.filter({ hasText: name });
+    await item.locator('button', { hasText: 'Remove' }).click();
+  }
+
+  async getProductNames() {
+    return await this.inventoryItems.locator('.inventory_item_name').allTextContents();
+  }
+
+  async getProductPrices() {
+    const prices = await this.inventoryItems.locator('.inventory_item_price').allTextContents();
+    return prices.map((price) => parseFloat(price.replace('$', '')));
+  }
+
   async sortBy(option) {
     // options: 'az', 'za', 'lohi', 'hilo'
     await this.sortDropdown.selectOption(option);
