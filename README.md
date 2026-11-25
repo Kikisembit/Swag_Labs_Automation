@@ -1,6 +1,6 @@
-# SauceDemo Automation
+# Swag Labs Automation
 
-UI test automation for [SauceDemo](https://www.saucedemo.com) built with Playwright and Allure Report.
+UI test automation for [Swag Labs (SauceDemo)](https://www.saucedemo.com) built with Playwright and Allure Report.
 
 ---
 
@@ -27,8 +27,8 @@ UI test automation for [SauceDemo](https://www.saucedemo.com) built with Playwri
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd saucedemo-automation
+   git clone https://github.com/Kikisembit/Swag_Labs_Automation.git
+   cd Swag_Labs_Automation
    ```
 
 2. Install dependencies:
@@ -39,6 +39,11 @@ UI test automation for [SauceDemo](https://www.saucedemo.com) built with Playwri
 3. Install Playwright browsers:
    ```bash
    npx playwright install
+   ```
+
+4. Create a `.env` file from the template and fill in the SauceDemo credentials (listed on the [login page](https://www.saucedemo.com)):
+   ```bash
+   cp .env.example .env
    ```
 
 ---
@@ -89,7 +94,7 @@ npm run allure:open
 ## Project Structure
 
 ```
-saucedemo-automation/
+Swag_Labs_Automation/
 ├── pages/                  # Page Object Model classes
 │   ├── LoginPage.js
 │   ├── InventoryPage.js
