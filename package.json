@@ -7,6 +7,7 @@
     "test": "playwright test",
     "test:login": "playwright test tests/login.spec.js",
     "test:inventory": "playwright test tests/inventory.spec.js",
+    "test:cart": "playwright test tests/cart.spec.js",
     "test:checkout": "playwright test tests/checkout.spec.js",
     "test:headed": "playwright test --headed",
     "test:ui": "playwright test --ui",

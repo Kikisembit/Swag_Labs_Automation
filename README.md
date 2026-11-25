@@ -1,5 +1,7 @@
 # Swag Labs Automation
 
+[![Playwright Tests](https://github.com/Kikisembit/Swag_Labs_Automation/actions/workflows/playwright.yml/badge.svg)](https://github.com/Kikisembit/Swag_Labs_Automation/actions/workflows/playwright.yml)
+
 UI test automation for [Swag Labs (SauceDemo)](https://www.saucedemo.com) built with Playwright and Allure Report.
 
 ---
@@ -59,6 +61,7 @@ npm test
 ```bash
 npm run test:login
 npm run test:inventory
+npm run test:cart
 npm run test:checkout
 ```
 
@@ -71,6 +74,19 @@ npm run test:headed
 ```bash
 npm run test:ui
 ```
+
+---
+
+## Continuous Integration
+
+Tests run automatically on GitHub Actions ([`.github/workflows/playwright.yml`](.github/workflows/playwright.yml)) on every push and pull request to `main`, and can also be started manually from the **Actions** tab.
+
+- Runs headless Chromium on `ubuntu-latest` (2 retries on CI)
+- Uploads the **Playwright HTML report** and **Allure results** as build artifacts
+
+Credentials are read from repository secrets. Add these under **Settings → Secrets and variables → Actions**:
+
+`STANDARD_USER`, `LOCKED_OUT_USER`, `PROBLEM_USER`, `PERFORMANCE_GLITCH_USER`, `ERROR_USER`, `VISUAL_USER`, `PASSWORD`
 
 ---
 
@@ -101,10 +117,14 @@ Swag_Labs_Automation/
 │   ├── CartPage.js
 │   └── CheckoutPage.js
 │
+├── .github/workflows/      # CI pipeline (GitHub Actions)
+│   └── playwright.yml
+│
 ├── tests/                  # Test spec files
-│   ├── login.spec.js       # Login scenarios (6 test cases)
-│   ├── cart.spec.js        # Add to cart flow
-│   └── checkout.spec.js    # Checkout flow
+│   ├── login.spec.js       # Login scenarios per user type
+│   ├── inventory.spec.js   # Product listing, sorting, add/remove
+│   ├── cart.spec.js        # Cart add, remove, continue shopping
+│   └── checkout.spec.js    # Checkout flow, form validation, cancel
 │
 ├── utils/                  # Shared utilities
 │   ├── credentials.js      # Test user credentials
@@ -136,14 +156,31 @@ Swag_Labs_Automation/
 | TC3 | Broken product images | `problem_user` | All product images are the same (bug) |
 | TC4 | Slow login | `performance_glitch_user` | Login takes > 1 second |
 | TC5 | Remove from cart fails | `error_user` | Item stays in cart after remove |
-| TC6 | Visual overlap bug | `visual_user` | Cart icon overlaps filter icon (known bug) |
+| TC6 | Visual overlap bug | `visual_user` | Cart icon overlaps sort dropdown (known bug) |
+
+### Inventory (`inventory.spec.js`)
+| # | Test | Expected |
+|---|------|----------|
+| TC1 | Display all products | 6 products shown, each with name, price, and "Add to cart" button |
+| TC2 | Sort by name A to Z | Products in ascending alphabetical order |
+| TC3 | Sort by name Z to A | Products in descending alphabetical order |
+| TC4 | Sort by price low to high | Prices in ascending order |
+| TC5 | Sort by price high to low | Prices in descending order |
+| TC6 | Add & remove from inventory | Cart badge goes 2 → 1 → hidden |
 
 ### Cart (`cart.spec.js`)
 | # | Test | Expected |
 |---|------|----------|
 | TC1 | Add product to cart | Product appears in cart with correct name and quantity 1 |
+| TC2 | Remove product from cart | Removed item disappears, other item stays, badge updates |
+| TC3 | Continue shopping | Back to inventory, cart contents kept |
 
 ### Checkout (`checkout.spec.js`)
 | # | Test | Expected |
 |---|------|----------|
 | TC1 | Complete checkout | Order confirmed with "Thank you for your order!" message |
+| TC2 | All fields empty | "Error: First Name is required" |
+| TC3 | First name empty | "Error: First Name is required" |
+| TC4 | Last name empty | "Error: Last Name is required" |
+| TC5 | Postal code empty | "Error: Postal Code is required" |
+| TC6 | Cancel checkout | Back to cart, item still in cart |
