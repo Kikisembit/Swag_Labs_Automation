@@ -31,4 +31,42 @@ test.describe('Checkout Flow', () => {
     await checkoutPage.backToHome();
     await expect(page).toHaveURL(URLS.inventory);
   });
+
+  test.describe('Checkout form validation', () => {
+    const cases = [
+      { name: 'all fields are empty', firstName: '', lastName: '', postalCode: '', error: 'firstNameRequired' },
+      { name: 'first name is empty', firstName: '', lastName: 'Doe', postalCode: '12345', error: 'firstNameRequired' },
+      { name: 'last name is empty', firstName: 'John', lastName: '', postalCode: '12345', error: 'lastNameRequired' },
+      { name: 'postal code is empty', firstName: 'John', lastName: 'Doe', postalCode: '', error: 'postalCodeRequired' },
+    ];
+
+    for (const { name, firstName, lastName, postalCode, error } of cases) {
+      test(`should show error when ${name}`, async ({ page, cartPage, checkoutPage }) => {
+        await label('feature', 'Checkout');
+        await label('story', 'Validasi form checkout');
+        await description(`Verifikasi bahwa user tidak bisa lanjut ke step 2 checkout dan mendapat pesan error saat ${name}.`);
+        await severity('normal');
+
+        await cartPage.checkout();
+        await checkoutPage.fillInfo(firstName, lastName, postalCode);
+        await checkoutPage.continue();
+
+        await expect(checkoutPage.errorMessage).toHaveText(ERROR_MESSAGES[error]);
+        await expect(page).toHaveURL(URLS.checkoutStepOne);
+      });
+    }
+  });
+
+  test('should return to cart when checkout is cancelled', async ({ page, cartPage, checkoutPage }) => {
+    await label('feature', 'Checkout');
+    await label('story', 'Batalkan checkout');
+    await description('Verifikasi bahwa tombol "Cancel" di step 1 checkout kembali ke halaman cart dan isi cart tetap ada.');
+    await severity('minor');
+
+    await cartPage.checkout();
+    await checkoutPage.cancel();
+
+    await expect(page).toHaveURL(URLS.cart);
+    await expect(cartPage.cartItems).toHaveCount(1);
+  });
 });
